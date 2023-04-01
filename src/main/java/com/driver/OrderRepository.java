@@ -102,9 +102,12 @@ public class OrderRepository {
                 }
             }
         }
-        int hours = time / 10000;
-        int minutes = (time % 10000) / 100;
-        String convertedTime = String.format("%02d:%02d", hours, minutes);
+//        int hours = time / 10000;
+//        int minutes = (time % 10000) / 100;
+//        String convertedTime = String.format("%02d:%02d", hours, minutes);
+        int hour = time/60;
+        int min = time%60;
+        String convertedTime = hour + ":" + min;
         return convertedTime;
     }
 
