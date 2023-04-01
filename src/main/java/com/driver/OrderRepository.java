@@ -63,13 +63,14 @@ public class OrderRepository {
     }
 
     public int getCountOfUnassignedOrders(){
-        int count = 0;
-        for(String orderId : orderDb.keySet()){
-            if(orderPartnerPair.get(orderId) == null){
-                count++;
-            }
-        }
-        return count;
+//        int count = 0;
+//        for(String orderId : orderDb.keySet()){
+//            if(orderPartnerPair.get(orderId) == null){
+//                count++;
+//            }
+//        }
+//        return count;
+        return orderDb.size() - orderPartnerPair.size();
     }
 
     public int getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId){
