@@ -20,7 +20,7 @@ public class OrderRepository {
 
     public void addPartner(String partnerId){
         DeliveryPartner deliveryPartner = new DeliveryPartner(partnerId);
-        partnerDb.put(partnerId,deliveryPartner);
+        partnerDb.put(deliveryPartner.getId(),deliveryPartner);
     }
 
     public void addOrderPartnerPair(String orderId, String partnerId){
@@ -63,12 +63,7 @@ public class OrderRepository {
     }
 
     public int getCountOfUnassignedOrders(){
-        int count = 0;
-        for(String orderId : orderDb.keySet()){
-            if(orderPartnerPair.get(orderId) == null){
-                count++;
-            }
-        }
+        int count = orderDb.size() - orderPartnerPair.size();
         return count;
     }
 
@@ -97,9 +92,10 @@ public class OrderRepository {
         for(Map.Entry<String, String> entry : orderPartnerPair.entrySet()){
             if(entry.getValue().equals(partnerId)){
                 String orderId = entry.getKey();
-                if(orderDb.get(orderId).getDeliveryTime() > time){
-                    time = orderDb.get(orderId).getDeliveryTime();
-                }
+                time = Math.max(time, orderDb.get(orderId).getDeliveryTime());
+//                if(orderDb.get(orderId).getDeliveryTime() > time){
+//                    time = orderDb.get(orderId).getDeliveryTime();
+//                }
             }
         }
         int hours = time / 10000;
