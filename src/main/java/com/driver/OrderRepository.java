@@ -63,7 +63,12 @@ public class OrderRepository {
     }
 
     public int getCountOfUnassignedOrders(){
-        int count = orderDb.size() - orderPartnerPair.size();
+        int count = 0;
+        for(String orderId : orderDb.keySet()){
+            if(orderPartnerPair.get(orderId) == null){
+                count++;
+            }
+        }
         return count;
     }
 
@@ -92,10 +97,9 @@ public class OrderRepository {
         for(Map.Entry<String, String> entry : orderPartnerPair.entrySet()){
             if(entry.getValue().equals(partnerId)){
                 String orderId = entry.getKey();
-                time = Math.max(time, orderDb.get(orderId).getDeliveryTime());
-//                if(orderDb.get(orderId).getDeliveryTime() > time){
-//                    time = orderDb.get(orderId).getDeliveryTime();
-//                }
+                if(orderDb.get(orderId).getDeliveryTime() > time){
+                    time = orderDb.get(orderId).getDeliveryTime();
+                }
             }
         }
         int hours = time / 10000;
