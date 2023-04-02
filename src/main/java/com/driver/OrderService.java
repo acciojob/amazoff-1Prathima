@@ -20,43 +20,35 @@ public class OrderService {
     }
 
     public Order getOrderById(String orderId){
-        Order order = orderRepository.getOrderById(orderId);
-        return order;
+        return orderRepository.getOrderById(orderId);
     }
 
     public DeliveryPartner getPartnerById(String partnerId){
-        DeliveryPartner deliveryPartner = orderRepository.getPartnerById(partnerId);
-        return deliveryPartner;
+        return orderRepository.getPartnerById(partnerId);
     }
 
     public int getOrderCountByPartnerId(String partnerId){
-        int count = orderRepository.getOrderCountByPartnerId(partnerId);
-        return count;
+        return orderRepository.getOrderCountByPartnerId(partnerId);
     }
 
     public List<String> getOrdersByPartnerId(String partnerId){
-        List<String> orders = orderRepository.getOrdersByPartnerId(partnerId);
-        return orders;
+        return orderRepository.getOrdersByPartnerId(partnerId);
     }
 
     public List<String> getAllOrders(){
-        List<String> allOrders = orderRepository.getAllOrders();
-        return allOrders;
+        return orderRepository.getAllOrders();
     }
 
     public int getCountOfUnassignedOrders(){
-        int count = orderRepository.getCountOfUnassignedOrders();
-        return count;
+        return orderRepository.getCountOfUnassignedOrders();
     }
 
     public int getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId){
-        int count = orderRepository.getOrdersLeftAfterGivenTimeByPartnerId(time, partnerId);
-        return count;
+        return orderRepository.getOrdersLeftAfterGivenTimeByPartnerId(time, partnerId);
     }
 
     public String getLastDeliveryTimeByPartnerId(String partnerId){
-        String time = orderRepository.getLastDeliveryTimeByPartnerId(partnerId);
-        return time;
+        return orderRepository.getLastDeliveryTimeByPartnerId(partnerId);
     }
 
     public void deletePartnerById(String partnerId){
