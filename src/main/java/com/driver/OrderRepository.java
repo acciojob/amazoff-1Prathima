@@ -40,7 +40,10 @@ public class OrderRepository {
     }
 
     public DeliveryPartner getPartnerById(String partnerId){
-        DeliveryPartner deliveryPartner = partnerDb.get(partnerId);
+        DeliveryPartner deliveryPartner = null;
+        if(partnerDb.containsKey(partnerId)){
+            deliveryPartner = partnerDb.get(partnerId);
+        }
         return deliveryPartner;
     }
 
