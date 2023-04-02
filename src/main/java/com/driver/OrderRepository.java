@@ -36,8 +36,7 @@ public class OrderRepository {
     }
 
     public Order getOrderById(String orderId){
-        Order order = orderDb.get(orderId);
-        return order;
+        return orderDb.get(orderId);
     }
 
     public DeliveryPartner getPartnerById(String partnerId){
@@ -50,8 +49,8 @@ public class OrderRepository {
     }
 
     public List<String> getOrdersByPartnerId(String partnerId){
-        List<String> orders = partnerOrderPair.get(partnerId);
-        return orders;
+        return partnerOrderPair.get(partnerId);
+
     }
 
     public List<String> getAllOrders(){
@@ -91,25 +90,21 @@ public class OrderRepository {
         }
         int hours = time / 60;
         int minutes = (time % 60);
-        String convertedTime = String.format("%02d:%02d", hours, minutes);
-        return convertedTime;
+        return String.format("%02d:%02d", hours, minutes);
+
     }
 
     public void deletePartnerById(String partnerId){
         partnerDb.remove(partnerId);
         if(partnerOrderPair.containsKey(partnerId)) {
-            for (String orderId : partnerOrderPair.get(partnerId)) {
-                unassignedOrders.add(orderId);
-            }
+            unassignedOrders.addAll(partnerOrderPair.get(partnerId));
         }
         partnerOrderPair.remove(partnerId);
     }
 
     public void deleteOrderById(String orderId){
         orderDb.remove(orderId);
-        if(unassignedOrders.contains(orderId)){
-            unassignedOrders.remove(orderId);
-        }
+        unassignedOrders.remove(orderId);
         for(Map.Entry<String, List<String>> entry : partnerOrderPair.entrySet()){
             String partner = entry.getKey();
             for(String order : partnerOrderPair.get(partner)){
