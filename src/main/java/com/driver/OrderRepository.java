@@ -65,7 +65,7 @@ public class OrderRepository {
     public int getCountOfUnassignedOrders(){
         int count = 0;
         for(String orderId : orderDb.keySet()){
-            if(!orderPartnerPair.containsKey(orderId)){
+            if(orderPartnerPair.get(orderId) == null){
                 count++;
             }
         }
@@ -85,7 +85,6 @@ public class OrderRepository {
                 if(orderDb.get(orderId).getDeliveryTime() > convertedTime){
                     count++;
                 }
-
             }
         }
         return count;
@@ -102,12 +101,12 @@ public class OrderRepository {
                 }
             }
         }
-//        int hours = time / 10000;
-//        int minutes = (time % 10000) / 100;
-//        String convertedTime = String.format("%02d:%02d", hours, minutes);
-        int hour = time/60;
-        int min = time%60;
-        String convertedTime = hour + ":" + min;
+        int hours = time / 60;
+        int minutes = (time % 60);
+        String convertedTime = String.format("%02d:%02d", hours, minutes);
+//        int hour = time/60;
+//        int min = time%60;
+//        String convertedTime = hour + ":" + min;
         return convertedTime;
     }
 
