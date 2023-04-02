@@ -7,11 +7,11 @@ import java.util.Map;
 
 public class OrderRepository {
 
-    HashMap<String, Order> orderDb = new HashMap<>();
-    HashMap<String, DeliveryPartner> partnerDb = new HashMap<>();
+    HashMap<String, Order> orderDb = new HashMap<>();  //orderId, order
+    HashMap<String, DeliveryPartner> partnerDb = new HashMap<>();  //partnerId, partner
 
-    HashMap<String, List<String>> partnerOrderPair = new HashMap<>();
-    HashMap<String, String> orderPartnerPair = new HashMap<>();
+    HashMap<String, List<String>> partnerOrderPair = new HashMap<>();  //partnerId, List<orderId>
+    HashMap<String, String> orderPartnerPair = new HashMap<>();  //orderId, partnerId
 
     public void addOrder(Order order){
         String key = order.getId();
@@ -20,7 +20,7 @@ public class OrderRepository {
 
     public void addPartner(String partnerId){
         DeliveryPartner deliveryPartner = new DeliveryPartner(partnerId);
-        partnerDb.put(deliveryPartner.getId(),deliveryPartner);
+        partnerDb.put(partnerId, deliveryPartner);
     }
 
     public void addOrderPartnerPair(String orderId, String partnerId){
@@ -40,10 +40,7 @@ public class OrderRepository {
     }
 
     public DeliveryPartner getPartnerById(String partnerId){
-        DeliveryPartner deliveryPartner = null;
-        if(partnerDb.containsKey(partnerId)){
-            deliveryPartner = partnerDb.get(partnerId);
-        }
+        DeliveryPartner deliveryPartner = partnerDb.get(partnerId);
         return deliveryPartner;
     }
 
@@ -68,7 +65,7 @@ public class OrderRepository {
     public int getCountOfUnassignedOrders(){
         int count = 0;
         for(String orderId : orderDb.keySet()){
-            if(orderPartnerPair.get(orderId) == null){
+            if(!orderPartnerPair.containsKey(orderId)){
                 count++;
             }
         }
