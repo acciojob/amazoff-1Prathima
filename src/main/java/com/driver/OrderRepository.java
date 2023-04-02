@@ -15,16 +15,17 @@ public class OrderRepository {
 
     public void addOrder(Order order){
         String key = order.getId();
-        orderDb.put(key, order);
+        orderDb.put(key,order);
         unassignedOrders.add(key);
     }
 
     public void addPartner(String partnerId){
-        partnerDb.put(partnerId, new DeliveryPartner(partnerId));
+        DeliveryPartner deliveryPartner = new DeliveryPartner(partnerId);
+        partnerDb.put(partnerId, deliveryPartner);
     }
 
     public void addOrderPartnerPair(String orderId, String partnerId){
-
+        partnerDb.get(partnerId).setNumberOfOrders(partnerDb.get(partnerId).getNumberOfOrders()+1);
         List<String> orders = partnerOrderPair.get(partnerId);
         if(orders == null){
             orders = new ArrayList<>();
