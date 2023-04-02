@@ -64,12 +64,11 @@ public class OrderRepository {
 
     public int getCountOfUnassignedOrders(){
         int count = 0;
-//        for(String orderId : orderDb.keySet()){
-//            if(orderPartnerPair.get(orderId) == null){
-//                count++;
-//            }
-//        }
-        count = orderDb.size() - orderPartnerPair.size();
+        for(String orderId : orderDb.keySet()){
+            if(orderPartnerPair.get(orderId) == null){
+                count++;
+            }
+        }
         return count;
     }
 
