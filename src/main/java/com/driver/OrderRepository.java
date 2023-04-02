@@ -1,9 +1,6 @@
 package com.driver;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OrderRepository {
 
@@ -11,11 +8,12 @@ public class OrderRepository {
     HashMap<String, DeliveryPartner> partnerDb = new HashMap<>();  //partnerId, partner
 
     HashMap<String, List<String>> partnerOrderPair = new HashMap<>();  //partnerId, List<orderId>
-    HashMap<String, String> orderPartnerPair = new HashMap<>();  //orderId, partnerId
+    HashSet<String> unassignedOrders = new HashSet<>();
 
     public void addOrder(Order order){
         String key = order.getId();
         orderDb.put(key, order);
+        unassignedOrders.add(key);
     }
 
     public void addPartner(String partnerId){
@@ -31,7 +29,7 @@ public class OrderRepository {
         }
         orders.add(orderId);
         partnerOrderPair.put(partnerId, orders);
-        orderPartnerPair.put(orderId, partnerId);
+        unassignedOrders.remove(orderId);
     }
 
     public Order getOrderById(String orderId){
@@ -63,42 +61,30 @@ public class OrderRepository {
     }
 
     public int getCountOfUnassignedOrders(){
-        int count = 0;
-        for(String orderId : orderDb.keySet()){
-            if(orderPartnerPair.get(orderId) == null){
-                count++;
-            }
-        }
-        return count;
+       return unassignedOrders.size();
     }
 
     public int getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId){
         int count = 0;
+//        int numericalTime = Integer.parseInt(time.substring(0,2))*60 + Integer.parseInt(time.substring(3,5));
         String[] hourMin = time.split(":");
         int hour = Integer.parseInt(hourMin[0]);
         int mins = Integer.parseInt(hourMin[1]);
         int convertedTime = hour * 60 + mins;
-        for(Map.Entry<String, String> entry : orderPartnerPair.entrySet()){
-            String partner = entry.getValue();
-            if(partner.equals(partnerId)){
-                String orderId = entry.getKey();
-                if(orderDb.get(orderId).getDeliveryTime() > convertedTime){
-                    count++;
-                }
-            }
-        }
+       for(String orderId : partnerOrderPair.get(partnerId)){
+           if(orderDb.get(orderId).getDeliveryTime() > convertedTime){
+               count++;
+           }
+       }
         return count;
     }
 
     public String getLastDeliveryTimeByPartnerId(String partnerId){
 
         int time = 0;
-        for(Map.Entry<String, String> entry : orderPartnerPair.entrySet()){
-            if(entry.getValue().equals(partnerId)){
-                String orderId = entry.getKey();
-                if(orderDb.get(orderId).getDeliveryTime() > time){
-                    time = orderDb.get(orderId).getDeliveryTime();
-                }
+        for(String orderId : partnerOrderPair.get(partnerId)){
+            if(orderDb.get(orderId).getDeliveryTime() > time){
+                time = orderDb.get(orderId).getDeliveryTime();
             }
         }
         int hours = time / 60;
@@ -110,14 +96,16 @@ public class OrderRepository {
     public void deletePartnerById(String partnerId){
         partnerDb.remove(partnerId);
         for(String orderId : partnerOrderPair.get(partnerId)){
-            orderPartnerPair.put(orderId, null);
+            unassignedOrders.add(orderId);
         }
         partnerOrderPair.remove(partnerId);
     }
 
     public void deleteOrderById(String orderId){
         orderDb.remove(orderId);
-        orderPartnerPair.remove(orderId);
+        if(unassignedOrders.contains(orderId)){
+            unassignedOrders.remove(orderId);
+        }
         for(Map.Entry<String, List<String>> entry : partnerOrderPair.entrySet()){
             String partner = entry.getKey();
             for(String order : partnerOrderPair.get(partner)){
