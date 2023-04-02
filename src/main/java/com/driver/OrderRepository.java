@@ -67,13 +67,9 @@ public class OrderRepository {
 
     public int getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId){
         int count = 0;
-//        int numericalTime = Integer.parseInt(time.substring(0,2))*60 + Integer.parseInt(time.substring(3,5));
-        String[] hourMin = time.split(":");
-        int hour = Integer.parseInt(hourMin[0]);
-        int mins = Integer.parseInt(hourMin[1]);
-        int convertedTime = hour * 60 + mins;
+        int numericalTime = Integer.parseInt(time.substring(0,2))*60 + Integer.parseInt(time.substring(3,5));
        for(String orderId : partnerOrderPair.get(partnerId)){
-           if(orderDb.get(orderId).getDeliveryTime() > convertedTime){
+           if(orderDb.get(orderId).getDeliveryTime() > numericalTime){
                count++;
            }
        }
@@ -88,9 +84,20 @@ public class OrderRepository {
                 time = orderDb.get(orderId).getDeliveryTime();
             }
         }
-        int hours = time / 60;
-        int minutes = (time % 60);
-        return String.format("%02d:%02d", hours, minutes);
+
+        int hours = time/60;
+        int minute = time%60;
+
+        String strHours = Integer.toString(hours);
+        if(strHours.length() == 1){
+            strHours = "0"+strHours;
+        }
+
+        String minutes = Integer.toString(minute);
+        if(minutes.length() == 1){
+            minutes = "0"+minutes;
+        }
+        return strHours + ":" + minutes;
 
     }
 
