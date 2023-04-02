@@ -64,11 +64,12 @@ public class OrderRepository {
 
     public int getCountOfUnassignedOrders(){
         int count = 0;
-        for(String orderId : orderDb.keySet()){
-            if(orderPartnerPair.get(orderId) == null){
-                count++;
-            }
-        }
+//        for(String orderId : orderDb.keySet()){
+//            if(orderPartnerPair.get(orderId) == null){
+//                count++;
+//            }
+//        }
+        count = orderDb.size() - orderPartnerPair.size();
         return count;
     }
 
@@ -104,9 +105,6 @@ public class OrderRepository {
         int hours = time / 60;
         int minutes = (time % 60);
         String convertedTime = String.format("%02d:%02d", hours, minutes);
-//        int hour = time/60;
-//        int min = time%60;
-//        String convertedTime = hour + ":" + min;
         return convertedTime;
     }
 
