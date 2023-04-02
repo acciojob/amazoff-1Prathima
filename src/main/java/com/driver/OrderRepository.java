@@ -17,8 +17,7 @@ public class OrderRepository {
     }
 
     public void addPartner(String partnerId){
-        DeliveryPartner deliveryPartner = new DeliveryPartner(partnerId);
-        partnerDb.put(partnerId, deliveryPartner);
+        partnerDb.put(partnerId, new DeliveryPartner(partnerId));
     }
 
     public void addOrderPartnerPair(String orderId, String partnerId){
@@ -38,8 +37,7 @@ public class OrderRepository {
     }
 
     public DeliveryPartner getPartnerById(String partnerId){
-        DeliveryPartner deliveryPartner = partnerDb.get(partnerId);
-        return deliveryPartner;
+        return partnerDb.get(partnerId);
     }
 
     public int getOrderCountByPartnerId(String partnerId){
@@ -95,8 +93,10 @@ public class OrderRepository {
 
     public void deletePartnerById(String partnerId){
         partnerDb.remove(partnerId);
-        for(String orderId : partnerOrderPair.get(partnerId)){
-            unassignedOrders.add(orderId);
+        if(partnerOrderPair.containsKey(partnerId)) {
+            for (String orderId : partnerOrderPair.get(partnerId)) {
+                unassignedOrders.add(orderId);
+            }
         }
         partnerOrderPair.remove(partnerId);
     }
